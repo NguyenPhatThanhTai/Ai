@@ -3,7 +3,7 @@ from cgitb import text
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import speech_recognition as sr
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, Qt
 from gtts import gTTS
 import wikipedia
 import playsound
@@ -51,7 +51,7 @@ class VoiceWorker(QtCore.QObject):
                     ai_brain = "Thông tin này tạm thời tôi chưa tìm được, mong bạn thông cảm"
                     print("AI: " + ai_brain)
 
-                self.AiResult.emit("-Ai nói là-: " + ai_brain + "...")
+                self.AiResult.emit("AI nói là: " + ai_brain + "...")
                 speak(ai_brain)
 
             except sr.UnknownValueError:
@@ -131,9 +131,9 @@ def Gui():
     title_label.setFont(QtGui.QFont("SansSerif", 15))
 
     programs_says = QtWidgets.QLabel(window)
-    programs_says.setText("Chương trình đã chạy")
-    programs_says.resize(200, 50)
-    programs_says.move(24,100)
+    programs_says.setText("Chương trình đang chạy...")
+    programs_says.resize(200, 20)
+    programs_says.move(25,70)
 
     you_says = QtWidgets.QLabel(window)
     you_says.move(25,100)
@@ -141,11 +141,14 @@ def Gui():
 
     you_text = QtWidgets.QLabel(window)
     worker.textChanged.connect(you_text.setText)
+    you_text.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+    you_text.alignment()
     you_text.move(25,120)
     you_text.resize(20000,50)
 
     you_text = QtWidgets.QLabel(window)
     worker.AiResult.connect(you_text.setText)
+    you_text.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop)
     you_text.setWordWrap(True)
     you_text.move(25,150)
     you_text.resize(300,300)

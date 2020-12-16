@@ -15,7 +15,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ui_splash_screen import Ui_SplashScreen
-from ui_main import Ui_MainWindow
+from ui_main import Ui_MainWindow, QCoreApplication
 from Controller import VoiceWorker
 # from Controller import runAi
 # from  Controller import speak
