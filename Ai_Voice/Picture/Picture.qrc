@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>exit.png</file>
+    <file>on-button.png</file>
+    <file>7904424933cc535b666f2de669973530.gif</file>
+    <file>man.png</file>
+    <file>C:/Users/THANH TAI/OneDrive/Pictures/message-bubble-icon-15.png</file>
+    <file>C:/Users/THANH TAI/OneDrive/Pictures/143-1436904_bubble-talk-speech-bubble-speech-balloon-speaking-hd.png</file>
+    <file>C:/Users/THANH TAI/OneDrive/Pictures/MessageBubble.png</file>
+    <file>C:/Users/THANH TAI/OneDrive/Pictures/speech-29435_1280.png</file>
+    <file>C:/Users/THANH TAI/OneDrive/Pictures/message-bubbles-chat-template-message-bubbles-vector-26936911 (2).jpg</file>
+  </qresource>
+</RCC>

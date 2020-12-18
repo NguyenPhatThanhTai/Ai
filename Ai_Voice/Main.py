@@ -81,14 +81,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.moveToThread(self.thread)
 
 
-        self.button = self.findChild(QtWidgets.QPushButton, 'pushButton')
+        self.button = self.findChild(QtWidgets.QPushButton, 'pb_Start')
         self.button.clicked.connect(self.worker.task)
-        self.button2 = self.findChild(QtWidgets.QPushButton, 'pushButton_2')
+        self.button2 = self.findChild(QtWidgets.QPushButton, 'pb_Exit')
         self.button2.clicked.connect(QCoreApplication.instance().quit)
 
-        self.label = self.findChild(QtWidgets.QLabel, 'User')
+        self.label = self.findChild(QtWidgets.QLabel, 'lb_user')
         self.worker.textChanged.connect(self.label.setText)
-        self.label2 = self.findChild(QtWidgets.QLabel, 'Ai')
+        self.label2 = self.findChild(QtWidgets.QLabel, 'lb_Ai')
         self.worker.AiResult.connect(self.label2.setText)
 
         self.show()
