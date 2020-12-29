@@ -1,11 +1,10 @@
 import ctypes
 import os
-from os import environ
 import sys
 import webbrowser
 import playsound
 import speech_recognition as sr
-from cgitb import text
+import subprocess
 from datetime import date, datetime
 
 import win32con
@@ -16,6 +15,7 @@ from wikipedia import wikipedia
 from IPython.external.qt_for_kernel import QtCore
 from PyQt5 import QtCore, QtWidgets, uic
 from PyQt5.QtCore import QCoreApplication
+import applescript
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
@@ -61,6 +61,29 @@ class VoiceWorker(QtCore.QObject):
                     self.AiResult.emit(ai_brain)
                     speak(ai_brain)
                     exit()
+                elif "độ sáng" in value:
+                    res = [int(i) for i in value.split() if i.isdigit()]
+                    if not res:
+                        ai_brain = "Hãy đưa ra 1 số trong khoản 1 đến 100 để tối có thể giúp bạn chỉnh độ sáng"
+                    elif res[0] > 100 or res[0] < 0:
+                        ai_brain = "Số không hợp lệ %a" % res[0]
+                    else:
+                        subprocess.call('C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+                                        '(Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,%a)' % (res[0]),shell=True)
+                        ai_brain = "Tôi đã điều chỉnh độ sáng thành %a phần trăm" % (res[0])
+                elif "âm lượng" in value:
+                    if "tăng âm" in value:
+                        subprocess.call('D:\\nircmd-x64\\nircmd.exe changesysvolume 6553,5')
+                        ai_brain = "Tôi đã tăng âm lượng lên 10% giúp bạn"
+                    elif "giảm âm" in value:
+                            subprocess.call('D:\\nircmd-x64\\nircmd.exe changesysvolume -6553,5')
+                            ai_brain = "Tôi đã giảm âm 10% giúp bạn"
+                    elif "tắt âm" in value:
+                        subprocess.call('D:\\nircmd-x64\\nircmd.exe mutesysvolume 1')
+                        ai_brain = "Tôi đã tắt âm giúp bạn"
+                    elif "mở âm" in value:
+                        subprocess.call('D:\\nircmd-x64\\nircmd.exe mutesysvolume 2')
+                        ai_brain = "Tôi đã mở âm giúp bạn"
                 elif "tắt máy" in value:
                     ai_brain = "Ok bạn muốn tôi tắt máy trong bao lâu nữa: bây giờ, 5 phút nữa, 10 phút nữa, 15 phút nữa, 30 phút nữa hay 1 giờ nữa"
                     self.AiResult.emit(ai_brain)
@@ -155,6 +178,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.AiResult.connect(self.label2.setText)
 
         self.show()
+        speak("Gút chóp em!!!")
 
 
 class SplashScreen(QtWidgets.QMainWindow):
@@ -194,7 +218,7 @@ def listen():
         audio = r.listen(source)
         try:
             value = r.recognize_google(audio, language='vi-VN')
-            if (value != "trợ lý ảo diệu"):
+            if (value != "amazing"):
                 listen()
             else:
                 app = QtWidgets.QApplication(sys.argv)
