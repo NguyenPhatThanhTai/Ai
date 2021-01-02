@@ -165,7 +165,7 @@ QProgressBar::chunk {
         <string notr="true">color: rgb(98, 114, 164);</string>
        </property>
        <property name="text">
-        <string>&lt;strong&gt;Được tạo bởi:&lt;/strong&gt; Hào Hảo Hán</string>
+        <string>&lt;strong&gt;Được tạo bởi:&lt;/strong&gt; Hằng Đẳng Thức</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
