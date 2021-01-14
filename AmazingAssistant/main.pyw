@@ -1,3 +1,4 @@
+import sqlite3
 import os
 import sys
 import webbrowser
@@ -54,6 +55,16 @@ class VoiceWorker(QtCore.QObject):
                     self.AiResult.emit(ai_brain)
                     speak(ai_brain)
                     exit()
+                # elif checkdata(value) in value:
+                #     ai_brain = getdata(value)
+                #     self.AiResult.emit(ai_brain)
+                #     speak(ai_brain)
+                # elif "Bình Minh" in value:
+                #     ai_brain = getdata(value)
+                #     self.AiResult.emit(ai_brain)
+                elif getdata(value) != "":
+                    ai_brain = getdata(value)
+                    self.AiResult.emit(ai_brain)
                 elif "độ sáng" in value:
                     res = [int(i) for i in value.split() if i.isdigit()]
                     if not res:
@@ -135,12 +146,42 @@ class VoiceWorker(QtCore.QObject):
                     except wikipedia.exceptions.PageError:
                         ai_brain = "Thông tin này tạm thời tôi chưa tìm được, mong bạn thông cảm"
                 else:
-                    ai_brain = "Nhấn bắt đầu và thử: tắt máy, khởi động lại, google, hoặc wikipedia..."
+                    ai_brain = "Tôi không biết: " + value + ", bạn dạy tôi nha"
+                    self.AiResult.emit(ai_brain)
+                    speak(ai_brain)
+                    ai_brain = "Xin mời sủa"
+                    self.AiResult.emit(ai_brain)
+                    audio = r.listen(source)
+                    value2 = r.recognize_google(audio, language="vi-VN")
+                    print(value)
+                    print(value2)
+                    cnn = sqlite3.connect('amazing.db')
+                    curso = cnn.cursor()
+                    print("alo")
+                    curso.execute(
+                        "INSERT INTO TuHoc(INP, OUTP) VALUES(" + "'" + value + "'" + ", " + "'" + value2 + "'" + ")")
+                    cnn.commit()
+                    ai_brain = "Đã thêm thành công"
+
                 self.AiResult.emit(ai_brain)
                 speak(ai_brain)
 
             except sr.UnknownValueError:
                 self.AiResult.emit("Có lỗi nhấn bắt đầu và thử lại")
+
+
+# lay data ra
+def getdata(data):
+    cnn = sqlite3.connect('amazing.db')
+    curso = cnn.cursor()
+    dataget = ''
+    curso.execute("SELECT * FROM TuHoc WHERE INP like " + "'%" + data + "%'" + " ORDER BY random() LIMIT 1")
+    data = curso.fetchall()
+    for row in data:
+        dataget = row[2]
+        print(row[2])
+    cnn.close()
+    return dataget
 
 
 def speak(ai_brain):
@@ -174,10 +215,8 @@ class MainWindow(QMainWindow):
         # self.show()
 
     def ClickHide(self):
-        os.startfile('D:\AmazingAssistant\main.pyw')
+        os.startfile('main.pyw')
         self.M.close()
-
-
 
 
 class SplashScreen(QMainWindow):
@@ -230,4 +269,8 @@ def listen():
         except sr.UnknownValueError:
             listen()
 
+
+# app = QtWidgets.QApplication(sys.argv)
+# windows = MainWindow()
+# sys.exit(app.exec_())
 listen()
